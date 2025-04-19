@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tip Your Waiter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF7E54;
+            --primary-dark: #FF5C2B;
+            --secondary: #2E3192;
+            --accent: #00C2CB;
+            --background: #F5F7FF;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #777777;
+            --success: #00D9B2;
+            --border-radius: 20px;
+            --shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--background), #E9EFFF);
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .payment-container {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .payment-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+        
+        .header h1 {
+            color: var(--secondary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 8px 20px rgba(255, 126, 84, 0.3);
+        }
+        
+        .bill-info {
+            background: linear-gradient(to right, rgba(0, 194, 203, 0.05), rgba(46, 49, 146, 0.05));
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 194, 203, 0.1);
+        }
+        
+        .bill-info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed rgba(119, 119, 119, 0.15);
+        }
+        
+        .bill-info-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .bill-label {
+            font-weight: 500;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .bill-value {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .tip-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: block;
+            color: var(--text);
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .tip-input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tip-input-field {
+            height: 60px;
+            border: 2px solid #E0E6FF;
+            border-radius: 16px;
+            padding: 10px 15px 10px 50px;
+            font-size: 1.5rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .tip-input-field:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(0, 194, 203, 0.15);
+            outline: none;
+        }
+        
+        .currency-symbol {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .quick-tips {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .quick-tip-btn {
+            flex: 1;
+            min-width: calc(25% - 8px);
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background-color: #F0F3FF;
+            color: var(--text);
+            font-weight: 600;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-tip-btn:hover {
+            background-color: #E0E6FF;
+            transform: translateY(-2px);
+        }
+        
+        .quick-tip-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 126, 84, 0.25);
+        }
+        
+        .total-section {
+            background: linear-gradient(135deg, var(--secondary), #252A7B);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            color: white;
+            box-shadow: 0 8px 20px rgba(46, 49, 146, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .total-label {
+            font-weight: 500;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .total-amount {
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pay-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 15px rgba(255, 126, 84, 0.25);
+        }
+        
+        .pay-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(255, 126, 84, 0.3);
+        }
+        
+        .pay-button:active {
+            transform: translateY(-1px);
+        }
+        
+        .pay-icon {
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        @media (max-width: 480px) {
+            .payment-container {
+                padding: 1.8rem;
+                border-radius: 16px;
+            }
+            
+            .header-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+            }
+            
+            .quick-tip-btn {
+                min-width: calc(50% - 5px);
+            }
+            
+            .tip-input-field {
+                height: 55px;
+                font-size: 1.3rem;
+            }
+        }
+        
+        /* Adding subtle animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .payment-container {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .waiter-info-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: rgba(0, 194, 203, 0.1);
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="header">
+            <div class="header-icon">
+                <i class="fas fa-receipt"></i>
+            </div>
+            <h1>Pay Your Bill & Tip</h1>
+            <div class="waiter-info-badge">
+                <i class="fas fa-user-check"></i>
+                <span>{{ waiter.name }}</span>
+            </div>
+        </div>
+        
+        <div class="bill-info">
+            <div class="bill-info-row">
+                <span class="bill-label">
+                    <i class="fas fa-user-tie"></i> Waiter
+                </span>
+                <span class="bill-value">{{ waiter.name }}</span>
+            </div>
+            <div class="bill-info-row">
+                <span class="bill-label">
+                    <i class="fas fa-chair"></i> Table Number
+                </span>
+                <span class="bill-value">{{ table_no }}</span>
+            </div>
+            <div class="bill-info-row">
+                <span class="bill-label">
+                    <i class="fas fa-file-invoice"></i> Bill Amount
+                </span>
+                <span class="bill-value">₹{{ amount }}</span>
+            </div>
+        </div>
+        
+        <form method="post" action="/process_payment" id="payment-form">
+            <input type="hidden" name="waiter_id" value="{{ waiter.id }}">
+            <input type="hidden" name="table_no" value="{{ table_no }}">
+            <input type="hidden" id="bill_amount" name="amount" value="{{ amount }}">
+            
+            <div class="tip-section">
+                <label class="section-title">Add a tip for great service</label>
+                <div class="tip-input-group">
+                    <span class="currency-symbol">₹</span>
+                    <input type="number" id="tip_amount" name="tip_amount" value="0" min="0" step="1" class="tip-input-field" oninput="updateTotal()">
+                </div>
+                
+                <div class="quick-tips">
+                    <button type="button" class="quick-tip-btn active" onclick="setTip(0)">No Tip</button>
+                    <button type="button" class="quick-tip-btn" onclick="setTip(50)">₹50</button>
+                    <button type="button" class="quick-tip-btn" onclick="setTip(100)">₹100</button>
+                    <button type="button" class="quick-tip-btn" onclick="setTip(200)">₹200</button>
+                </div>
+            </div>
+            
+            <div class="total-section">
+                <span class="total-label">Total to Pay</span>
+                <span id="total_display" class="total-amount">₹{{ amount }}</span>
+            </div>
+            
+            <button type="submit" class="pay-button">
+                <span class="pay-icon"><i class="fas fa-lock"></i></span>
+                Pay Now
+            </button>
+        </form>
+    </div>
+    
+    <script>
+        function updateTotal() {
+            const billAmount = parseFloat(document.getElementById("bill_amount").value);
+            const tip = parseFloat(document.getElementById("tip_amount").value) || 0;
+            const total = billAmount + tip;
+            document.getElementById("total_display").innerText = "₹" + total.toFixed(2);
+            
+            // Update active state on quick tip buttons
+            updateActiveQuickTipButton(tip);
+        }
+        
+        function setTip(amount) {
+            document.getElementById("tip_amount").value = amount;
+            updateTotal();
+        }
+        
+        function updateActiveQuickTipButton(tipAmount) {
+            const quickTipButtons = document.querySelectorAll('.quick-tip-btn');
+            quickTipButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Find the button that matches the current tip amount
+            const tipValues = [0, 50, 100, 200];
+            const index = tipValues.indexOf(tipAmount);
+            if (index !== -1) {
+                quickTipButtons[index].classList.add('active');
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTotal();
+            // Add subtle animation for buttons
+            const buttons = document.querySelectorAll('.quick-tip-btn');
+            buttons.forEach((btn, index) => {
+                btn.style.animationDelay = (index * 0.1) + 's';
+            });
+        });
+    </script>
+</body>
+</html>

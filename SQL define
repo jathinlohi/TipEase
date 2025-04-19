@@ -1,0 +1,41 @@
+CREATE TABLE waiters (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    upi_id TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE bills (
+    id SERIAL PRIMARY KEY,
+    table_no INTEGER NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    waiter_id INTEGER NOT NULL,
+    status VARCHAR(20) DEFAULT 'PENDING',
+    FOREIGN KEY (waiter_id) REFERENCES waiters(id)
+);
+
+CREATE TABLE transactions (
+    id SERIAL PRIMARY KEY,
+    bill_id INTEGER NOT NULL,
+    waiter_id INTEGER NOT NULL,
+    tip_amount DECIMAL(10, 2) NOT NULL,
+    total_paid DECIMAL(10, 2) NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'SUCCESS',
+    FOREIGN KEY (bill_id) REFERENCES bills(id),
+    FOREIGN KEY (waiter_id) REFERENCES waiters(id)
+);
+
+CREATE TABLE tip_settlements (
+    id SERIAL PRIMARY KEY,
+    waiter_id INTEGER NOT NULL,
+    total_tips DECIMAL(10, 2) NOT NULL,
+    settled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (waiter_id) REFERENCES waiters(id)
+);
+
+
+ALTER TABLE transactions
+ADD COLUMN payment_id VARCHAR(12);
+
+ALTER TABLE tip_settlements
+ADD COLUMN payment_id VARCHAR(12);

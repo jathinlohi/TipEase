@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settle Tips</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 36px;
+        }
+
+        form {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 18px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        h3 {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .warning {
+            color: #f39c12;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Settle Tips for Waiters</h1>
+    
+    <!-- Form to input waiter ID -->
+    <form id="settle_tips_form" onsubmit="settleTips(event)">
+        <label for="waiter_id">Enter Waiter ID:</label>
+        <input type="number" id="waiter_id" name="waiter_id" required>
+        <button type="submit">Settle Tips</button>
+    </form>
+    
+    <h3>Tip Settlement Status:</h3>
+    <pre id="status"></pre>
+
+    <script>
+        // Function to settle tips for a specific waiter
+        async function settleTips(event) {
+            event.preventDefault();  // Prevent form submission
+    
+            const waiterId = document.getElementById('waiter_id').value;
+    
+            if (!waiterId) {
+                alert("Please enter a waiter ID.");
+                return;
+            }
+    
+            console.log("Settling tips for waiter ID:", waiterId);
+    
+            try {
+                const response = await fetch(`http://localhost:8000/settle_tips/${waiterId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+    
+                const data = await response.json();
+                const statusElement = document.getElementById('status');
+    
+                if (response.ok) {
+                    const amountSent = data.settlement?.total_tips ?? 0;
+                    statusElement.innerHTML = `<span class="success">✅ Tip settled successfully. Amount sent: ₹${amountSent}</span>`;
+                } else {
+                    statusElement.innerHTML = `<span class="error">❌ Error: ${data.detail || data.message}</span>`;
+                }
+            } catch (error) {
+                console.error("Fetch failed:", error);
+                document.getElementById('status').innerHTML = `<span class="warning">⚠️ Fetch error: ${error}</span>`;
+            }
+        }
+    </script>    
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TipEase - Restaurant Tipping System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #4f46e5;
+            --accent-color: #f43f5e;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 2rem 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero-title {
+            color: white;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .hero-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-icon {
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 48px;
+            height: 48px;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            border-radius: 0.5rem;
+            font-weight: 500;
+            padding: 0.625rem 1.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary, .bg-primary {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+        }
+        
+        .btn-success, .bg-success {
+            background-color: #10b981 !important;
+            border-color: #10b981 !important;
+        }
+        
+        .btn-info, .bg-info {
+            background-color: #0ea5e9 !important;
+            border-color: #0ea5e9 !important;
+            color: white !important;
+        }
+        
+        .btn-secondary, .bg-secondary {
+            background-color: var(--dark-color) !important;
+            border-color: var(--dark-color) !important;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-control {
+            border-radius: 0.5rem;
+            padding: 0.625rem 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+        }
+        
+        .waiter-info-card {
+            border-left: 4px solid var(--primary-color);
+            background-color: #f8fafc;
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--dark-color);">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-money-bill-wave me-2"></i>
+                TipEase
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/create_bill"><i class="fas fa-qrcode me-1"></i> Create Bill</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settle_tips"><i class="fas fa-hand-holding-usd me-1"></i> Settle Tips</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="hero-title">TipEase</h1>
+            <p class="hero-subtitle mb-0">Simplify payments and manage tips efficiently</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div>
+                                <h2 class="h4 mb-0">Add New Waiter</h2>
+                                <small>Register waiter details for tip processing</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form action="/waiters" method="post">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">
+                                    <i class="fas fa-user me-2 text-primary"></i>Waiter Name
+                                </label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter full name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="upi_id" class="form-label">
+                                    <i class="fas fa-credit-card me-2 text-primary"></i>UPI ID
+                                </label>
+                                <input type="text" class="form-control" id="upi_id" name="upi_id" placeholder="example@upi" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-plus-circle me-2"></i>Add Waiter
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon">
+                                        <i class="fas fa-qrcode"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="h4 mb-0">Generate Bill QR</h2>
+                                        <small>Create payment QR codes for tables</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="feature-icon fas fa-table"></i>
+                                    <span>Assign bills to specific tables</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="feature-icon fas fa-qrcode"></i>
+                                    <span>Generate scannable QR codes</span>
+                                </div>
+                                <a href="/create_bill" class="btn btn-success w-100 pulse-animation">
+                                    <i class="fas fa-file-invoice-dollar me-2"></i>Create Bill with QR
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon">
+                                        <i class="fas fa-hand-holding-usd"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="h4 mb-0">Settle Waiter Tips</h2>
+                                        <small>Process accumulated tips for waiters</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="feature-icon fas fa-calculator"></i>
+                                    <span>Calculate total tips received</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="feature-icon fas fa-history"></i>
+                                    <span>View settlement history</span>
+                                </div>
+                                <a href="/settle_tips" class="btn btn-info w-100">
+                                    <i class="fas fa-money-bill-wave me-2"></i>Settle Tips Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <div>
+                                <h2 class="h4 mb-0">Find Waiter</h2>
+                                <small>Look up waiter information by ID</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="findWaiterForm" class="row g-3">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-secondary text-white">
+                                        <i class="fas fa-id-badge"></i>
+                                    </span>
+                                    <input type="number" class="form-control" id="waiter_id" name="waiter_id" placeholder="Enter waiter ID" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" onclick="findWaiter()" class="btn btn-secondary w-100">
+                                    <i class="fas fa-search me-2"></i>Find Waiter
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div id="waiterInfo" class="mt-4 d-none">
+                            <h3 class="h5 mb-3">
+                                <i class="fas fa-user-check me-2 text-success"></i>Waiter Information
+                            </h3>
+                            <div class="card waiter-info-card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <p class="mb-2">
+                                                <i class="fas fa-user me-2 text-secondary"></i>
+                                                <strong>Name: </strong><span id="waiterName"></span>
+                                            </p>
+                                            <p class="mb-3">
+                                                <i class="fas fa-credit-card me-2 text-secondary"></i>
+                                                <strong>UPI ID: </strong><span id="waiterUpi"></span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center justify-content-end">
+                                            <a id="tipLink" href="#" class="btn btn-primary">
+                                                <i class="fas fa-hand-holding-usd me-2"></i>Tip This Waiter
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>
+                        <i class="fas fa-money-bill-wave me-2"></i>TipEase
+                    </h4>
+                    <p>Simplifying restaurant tipping and payment management.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2025 TipEase. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        async function findWaiter() {
+            const waiterId = document.getElementById('waiter_id').value;
+            if (!waiterId) {
+                alert('Please enter a waiter ID');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/waiter/${waiterId}`);
+                if (!response.ok) {
+                    throw new Error('Waiter not found');
+                }
+                
+                const waiter = await response.json();
+                document.getElementById('waiterName').textContent = waiter.name;
+                document.getElementById('waiterUpi').textContent = waiter.upi_id;
+                document.getElementById('tipLink').href = `/tip/${waiter.id}`;
+                document.getElementById('waiterInfo').classList.remove('d-none');
+                
+                // Scroll to the waiter info section
+                document.getElementById('waiterInfo').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
